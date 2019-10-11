@@ -46,13 +46,65 @@ var connection = mysql.createConnection({
 });
 
 
+
+
 // runBamazon will execute the main application logic
 function runBamazon() {
 	// console.log('___ENTER runBamazon___');
-
 	// Display the available inventory
 	displayInventory();
 }
 
+
+
 // Run the application logic
 runBamazon();
+
+
+
+
+
+// validateInput makes sure that the user is supplying only positive integers for their inputs
+function validateInput(value) {
+}
+
+
+
+
+
+// promptUserPurchase will prompt the user for the item/quantity they would like to purchase
+function promptUserPurchase() {
+	// console.log('___ENTER promptUserPurchase___');
+
+	// Prompt the user to select an item
+	inquirer.prompt([
+
+	]).then(function(input) {
+		// console.log('Customer has selected: \n    item_id = '  + input.item_id + '\n    quantity = ' + input.quantity);
+
+		
+					connection.query(updateQueryStr, function(err, data) {
+						if (err) throw err;
+
+						console.log('Your oder has been placed! Your total is $' + productData.price * quantity);
+						console.log('Thank you for shopping with us!');
+						console.log("\n---------------------------------------------------------------------\n");
+
+						// End the database connection
+				
+					displayInventory();
+				}
+			}
+		})
+	})
+}
+
+
+
+
+
+
+	  	//Prompt the user for item/quantity they would like to purchase
+	  	promptUserPurchase();
+	})
+}
