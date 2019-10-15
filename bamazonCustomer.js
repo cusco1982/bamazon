@@ -60,14 +60,17 @@ function promptUserPurchase() {
 			type:'input',
 			name:'item_id',
 			message: 'Enter ID of item you would like to purchase',
+			validate: validateInput,
 			filter: Number
 		},
 		{
 			type: 'input',
 			name: 'quantity',
 			message: 'How many do you need?',
+			validate: validateInput,
 			filter: Number
 		}
 	]).then(function (input) {
 
-				displayInventory();
+		var item = input.item_id;
+		var quantity = input.quantity;
