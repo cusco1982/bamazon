@@ -6,7 +6,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
 	host: 'localhost',
 	port: 3306,
-	
+
 	user: 'root',
 	password: 'PASS',
 	database: 'bamazon'
@@ -57,19 +57,17 @@ function promptUserPurchase() {
 	// Prompt the user to select an item
 	inquirer.prompt([
 		{
-			type: 'input',
-			name: 'item_id',
+			type:'input',
+			name:'item_id',
 			message: 'Enter ID of item you would like to purchase',
-			validate: validateInput,
 			filter: Number
 		},
 		{
 			type: 'input',
 			name: 'quantity',
 			message: 'How many do you need?',
-			validate: validateInput,
 			filter: Number
 		}
-	]).then(function(input) {
+	]).then(function (input) {
 
-		
+				displayInventory();
