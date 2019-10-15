@@ -74,3 +74,9 @@ function promptUserPurchase() {
 
 		var item = input.item_id;
 		var quantity = input.quantity;
+
+		// ID match check
+		var idInput = 'SELECT * FROM products WHERE ?';
+
+		connection.query(idInput, { item_id: item }, function (err, data) {
+			if (err) throw err;
