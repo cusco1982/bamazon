@@ -48,3 +48,7 @@ VALUES  ('item1', 'Cosmetics', 5.50, 100),
 		('item8', 'Sales', 42.50, 13000),
 		('item9', 'Pharmacy', 200.75, 2),
 		('item10', 'Pharmacy', 1.99, 1)
+
+
+
+		
