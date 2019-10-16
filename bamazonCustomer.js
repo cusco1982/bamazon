@@ -13,17 +13,13 @@ var connection = mysql.createConnection({
 });
 
 
+// Then create a Node application called bamazonCustomer.js. 
 
 
 
 function runBamazon() {
 	displayInventory();
 }
-
-
-
-runBamazon();
-
 
 
 
@@ -45,14 +41,44 @@ function validateInput(value) {
 
 
 
+function displayInventory() {
+	
+	query = 'SELECT * FROM products';
+	
+	connection.query(query, function (err, data) {
+		if (err) throw err;
+		
+		console.log('\n', 'Items Available for Sale: ', '\n');
+		
+		var output = '';
+		for (var i = 0; i < data.length; i++) {
+			output = '';
+			output += 'Item ID: ' + data[i].item_id + '     ';
+			output += 'Product: ' + data[i].product_name + '     ';
+			output += 'Price: $' + data[i].price + '     ';
+			output += 'In Stock: ' + data[i].stock_quantity + '\n';
+			
+			// Include the ids, names, and prices of products for sale.
+			console.log(output);
+		}
+			
+		console.log("---------------------------------------------------------------------\n");
+		promptUserPurchase();
+	})
+}
+
+
+
+
 
 
 
 function promptUserPurchase() {
+
 	inquirer.prompt([
 		{
-			type:'input',
-			name:'item_id',
+			type: 'input',
+			name: 'item_id',
 			message: 'Enter ID of item you would like to buy',
 			validate: validateInput,
 			filter: Number
@@ -87,10 +113,10 @@ function promptUserPurchase() {
 
 					var updateQuantity = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE item_id = ' + item;
 
-					connection.query(updateQuantity, function(err, data) {
+					connection.query(updateQuantity, function (err, data) {
 						if (err) throw err;
 
-						console.log('Total cost of purchase is $',productData.price * quantity);
+						console.log('Total cost of purchase is $', productData.price * quantity);
 						connection.end();
 					})
 				} else {
@@ -101,3 +127,10 @@ function promptUserPurchase() {
 		})
 	})
 }
+
+
+
+
+
+runBamazon();
+
