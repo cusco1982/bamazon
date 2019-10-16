@@ -13,20 +13,15 @@ var connection = mysql.createConnection({
 });
 
 
-// Then create a Node application called bamazonCustomer.js. 
 
 
-// Running this application will first display all of the items available for sale. 
 
 function runBamazon() {
-	// Display the available inventory
-	// Include the ids, names, and prices of products for sale.
 	displayInventory();
 }
 
 
 
-// Run the application logic
 runBamazon();
 
 
@@ -42,7 +37,7 @@ function validateInput(value) {
 	if (integer && (sign === 1)) {
 		return true;
 	} else {
-		return 'Please enter a whole non-zero number.';
+		return 'Please enter an Item ID.';
 	}
 }
 
@@ -51,22 +46,21 @@ function validateInput(value) {
 
 
 
-// promptUserPurchase will prompt the user for the item/quantity they would like to purchase
-function promptUserPurchase() {
 
-	// Prompt the user to select an item
+
+function promptUserPurchase() {
 	inquirer.prompt([
 		{
 			type:'input',
 			name:'item_id',
-			message: 'Enter ID of item you would like to purchase',
+			message: 'Enter ID of item you would like to buy',
 			validate: validateInput,
 			filter: Number
 		},
 		{
 			type: 'input',
 			name: 'quantity',
-			message: 'How many do you need?',
+			message: 'How many units of this product would you like to buy?',
 			validate: validateInput,
 			filter: Number
 		}
@@ -80,3 +74,30 @@ function promptUserPurchase() {
 
 		connection.query(idInput, { item_id: item }, function (err, data) {
 			if (err) throw err;
+
+			if (data.length === 0) {
+				displayInventory();
+				console.log('Invalid Item ID! Please enter a valid Item ID.');
+			} else {
+				var productData = data[0];
+
+				// Checking if in stock
+				if (quantity <= productData.stock_quantity) {
+					console.log('Sufficient Quantity in Stock!');
+
+					var updateQuantity = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE item_id = ' + item;
+
+					connection.query(updateQuantity, function(err, data) {
+						if (err) throw err;
+
+						console.log('Total cost of purchase is $',productData.price * quantity);
+						connection.end();
+					})
+				} else {
+					displayInventory();
+					console.log('Insufficient quantity!');
+				}
+			}
+		})
+	})
+}
