@@ -17,58 +17,47 @@ var connection = mysql.createConnection({
 
 
 
-function runBamazon() {
-	displayInventory();
-}
-
-
-
-
+// Need to fix validation, almost works
 
 // Input Validation
-function validateInput(value) {
-	var integer = Number.isInteger(parseFloat(value));
-	var sign = Math.sign(value);
+// function validateInput(value) {
+// 	var integer = Number.isInteger(parseFloat(value));
+// 	var sign = Math.sign(value);
 
-	if (integer && (sign === 1)) {
-		return true;
-	} else {
-		return 'Please enter an Item ID.';
-	}
-}
-
-
+// 	if (integer && (sign === 1)) {
+// 		return true;
+// 	} else {
+// 		return 'Please enter an Item ID.';
+// 	}
+// }
 
 
 
 function displayInventory() {
-	
+
 	query = 'SELECT * FROM products';
-	
+
 	connection.query(query, function (err, data) {
 		if (err) throw err;
-		
-		console.log('\n', 'Items Available for Sale: ', '\n');
-		
+
+		console.log('\n\n', 'Items Available for Sale: ', '\n');
+
 		var output = '';
 		for (var i = 0; i < data.length; i++) {
+
+			// Include the ids, names, and prices of products for sale.
 			output = '';
 			output += 'Item ID: ' + data[i].item_id + '     ';
 			output += 'Product: ' + data[i].product_name + '     ';
 			output += 'Price: $' + data[i].price + '     ';
 			output += 'In Stock: ' + data[i].stock_quantity + '\n';
-			
-			// Include the ids, names, and prices of products for sale.
+
 			console.log(output);
 		}
-			
 		console.log("---------------------------------------------------------------------\n");
 		promptUserPurchase();
 	})
 }
-
-
-
 
 
 
@@ -80,14 +69,14 @@ function promptUserPurchase() {
 			type: 'input',
 			name: 'item_id',
 			message: 'Enter ID of item you would like to buy',
-			validate: validateInput,
+			// validate: validateInput,
 			filter: Number
 		},
 		{
 			type: 'input',
 			name: 'quantity',
 			message: 'How many units of this product would you like to buy?',
-			validate: validateInput,
+			// validate: validateInput,
 			filter: Number
 		}
 	]).then(function (input) {
@@ -127,10 +116,5 @@ function promptUserPurchase() {
 		})
 	})
 }
-
-
-
-
-
-runBamazon();
+displayInventory();
 
